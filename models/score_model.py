@@ -40,6 +40,52 @@ from datasets.process_mols import lig_feature_dims, rec_residue_feature_dims
     operation. Finally, the output features from the tensor product operation are batch normalized if batch_norm is 
     set to True, and the input features are added to the output features if residual is set to True.
 
+    The second section of the TensorProductScoreModel class defines the attributes and parameters of the neural network model used for scoring the protein-ligand interactions. These attributes and parameters are then used to create different parts of the model in the following sections.
+
+    The constructor __init__ takes several arguments and sets them as instance variables of the class, including the t_to_sigma which represents the mapping from a timestep to a sigmas value, device which specifies the device to run the computations on, timestep_emb_func which is a function to embed the timestep, in_lig_edge_features which represents the number of input features for the ligand edge embedding layer, sigma_embed_dim which is the dimension of the sigma embedding, sh_lmax which represents the maximum spherical harmonics order, ns and nv which are the number of nodes in the ligand and receptor graph respectively, num_conv_layers which is the number of convolution layers to use, lig_max_radius which is the maximum radius of the ligand, rec_max_radius which is the maximum radius of the receptor, cross_max_distance which is the maximum distance between the ligand and receptor, center_max_distance which is the maximum distance of the center of the ligand to the receptor, distance_embed_dim which is the embedding dimension of the distance, cross_distance_embed_dim which is the embedding dimension of the cross distance, no_torsion which specifies whether to use torsion angles or not, scale_by_sigma which specifies whether to scale by sigma or not, use_second_order_repr which specifies whether to use a second-order representation or not, batch_norm which specifies whether to use batch normalization or not, dynamic_max_cross which specifies whether to use dynamic maximum cross distances or not, dropout which is the dropout rate to use, lm_embedding_type which is the type of the light molecule embedding, confidence_mode which specifies whether to use confidence mode or not, confidence_dropout which is the confidence dropout rate to use, confidence_no_batchnorm which specifies whether to use batch normalization in confidence mode or not, and num_confidence_outputs which is the number of confidence outputs.
+
+    The instance variables are then used to create different parts of the model, including:
+
+        lig_node_embedding: the ligand node embedding layer, which maps the features of the ligand nodes to a node-wise representation.
+        lig_edge_embedding: the ligand edge embedding layer, which maps the features of the ligand edges to a edge-wise representation.
+        rec_node_embedding: the receptor node embedding layer, which maps the features of the receptor nodes to a node-wise representation.
+        rec_edge_embedding: the receptor edge embedding layer, which maps the features of the receptor edges to a edge-wise representation.
+        cross_edge_embedding: the cross edge embedding layer, which maps the features of the edges connecting the ligand and receptor nodes to a edge-wise representation.
+        lig_distance_expansion: the ligand distance expansion layer, which maps distances between the ligand nodes to a distance
+
+
+        First, the init method of the TensorProductScoreModel class is defined. This method is called automatically when an instance of the class is created. It takes several arguments that define the properties and behavior of the neural network. The arguments include:
+
+        t_to_sigma: a tensor that maps timesteps to molecular scales
+        device: the device to use for computations (e.g. CPU or GPU)
+        timestep_emb_func: a function that maps timesteps to embeddings
+        in_lig_edge_features: the number of input features for the ligand edge embedding
+        sigma_embed_dim: the dimensionality of the molecular scale embeddings
+        sh_lmax: the maximum spherical harmonic degree
+        ns: the number of atoms in the node embeddings
+        nv: the number of timestep embeddings
+        num_conv_layers: the number of convolutional layers to use
+        lig_max_radius: the maximum radius for the ligand distance expansion
+        rec_max_radius: the maximum radius for the receptor distance expansion
+        cross_max_distance: the maximum distance for the cross-molecular expansion
+        center_max_distance: the maximum distance from the center for computing distances
+        distance_embed_dim: the dimensionality of the distance embeddings
+        cross_distance_embed_dim: the dimensionality of the cross-molecular distance embeddings
+        no_torsion: a flag indicating whether to use torsion information
+        scale_by_sigma: a flag indicating whether to scale by molecular scale
+        use_second_order_repr: a flag indicating whether to use second-order representations
+        batch_norm: a flag indicating whether to use batch normalization
+        dynamic_max_cross: a flag indicating whether to dynamically set the maximum cross-molecular distance
+        dropout: the dropout rate to use for regularization
+        lm_embedding_type: the type of local coordinate system to use for the receptor node embedding
+        confidence_mode: a flag indicating whether to compute confidence scores
+        confidence_dropout: the dropout rate to use for the confidence scores
+        confidence_no_batchnorm: a flag indicating whether to use batch normalization for the confidence scores
+        num_confidence_outputs: the number of confidence scores to compute
+
+        The first line of the init method calls the init method of the parent class, torch.nn.Module, to properly initialize the class.
+
+        Next, the arguments passed to the init method are stored as class attributes so that they can be used elsewhere in the class. This is done by simply assigning the arguments to the corresponding attributes, e.g. self.device = device.
 """
 
 
